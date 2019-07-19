@@ -22,7 +22,7 @@ from keras.models import load_model
 from nn_utils.problem_generator import *
 from nn_utils.string_and_array import *
 
-DATA_PATH = "/home/ryan20083437/data"
+DATA_PATH = "../data"
 
 class NN_Entity_1:
 
