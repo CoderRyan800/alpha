@@ -999,10 +999,6 @@ def return_simple_propositional_templates():
     template_list = copy.deepcopy(initial_template_list)
 
     distractor_statements = ['pa1 is unknown', 'pa2 is unknown',
-                             'pa3 is unknown', 'pa3 is true', 'pa3 is false',
-                             'if pa1 then pa3', 'if pa2 then pa3',
-                             'if pa3 then pa1', 'if pa3 then pa2']
-    distractor_statements = ['pa1 is unknown', 'pa2 is unknown',
                              'pa3 is unknown', 'pa3 is true', 'pa3 is false']
 
     # distractor_statements = ['pa1 is unknown', 'pa2 is unknown',
