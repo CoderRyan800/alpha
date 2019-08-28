@@ -553,25 +553,25 @@ else:
     # Lines below are for using a pre-built model!
 
     test_entity = NN_Entity_1(id_number=1,
-                          nn_file="%s/trained_model_prop_new_1728.h5" % (DATA_PATH,),
+                          nn_file="%s/trained_model_prop_new_2048.h5" % (DATA_PATH,),
                           data_set_file='%s/data_set_0' % (DATA_PATH,))
 
 
 test_entity_2 = NN_Entity_1(id_number=2,
-                          nn_file="%s/trained_model_prop_new_1728.h5" % (DATA_PATH,),
+                          nn_file="%s/trained_model_prop_new_2048.h5" % (DATA_PATH,),
                           data_set_file='%s/data_set_0' % (DATA_PATH,))
 
 # test_entity.add_knowledge("if a2 then a3")
 # test_entity.add_knowledge("a1 is false")
 # test_entity_2.add_knowledge("if a3 then a1")
 
-test_entity.add_knowledge("a9 is false")
+test_entity.add_knowledge("a1 is true")
 test_entity_2.add_knowledge("if a1 then a9")
 
 # Ask first entity for value of a3.  Get its answer
 # and convert answer into format entity 2 can use.
 
-the_question = "what is a1 ?"
+the_question = "what is a9 ?"
 return_dict = test_entity.ask_question_remember_answer(the_question)
 return_string = return_dict['network_answer_string2']
 print(return_string)
