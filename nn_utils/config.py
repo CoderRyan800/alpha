@@ -20,4 +20,3 @@ CONFIG_SYMBOL_LIST = [
     'believes', 'knows', 'name', 'me', 'what', '.', '?',
     'if', 'then', 'help', "recite", None
 ]
-
