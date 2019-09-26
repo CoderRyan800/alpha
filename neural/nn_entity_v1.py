@@ -10,7 +10,7 @@ solving a simple propositional logic problem.
 
 import pickle
 import numpy as np
-
+import json
 from keras.models import Model
 from keras.layers import Input
 from keras.layers import Bidirectional, TimeDistributed
@@ -21,6 +21,7 @@ from keras.models import load_model
 
 from nn_utils.problem_generator import *
 from nn_utils.string_and_array import *
+#from neural.basic_nn_1 import *
 
 DATA_PATH = "../data"
 
@@ -32,7 +33,7 @@ class NN_Entity_1:
                  gen_data_sets=True, start_training_epoch=0, max_training_epoch=1024, max_data_sets=64,
                  num_instances=10000
                  ):
-        self.DATA_PATH = DATA_PATH
+
         # Create network if nn_file is None.  Otherwise
         # just load existing network.
 
@@ -40,7 +41,7 @@ class NN_Entity_1:
 
             self.generate_network(gen_data_sets, start_training_epoch, max_training_epoch, max_data_sets,
                  num_instances)
-
+            self.network_knowledge_test()
         else:
 
             self.model = load_model(nn_file)
@@ -90,40 +91,6 @@ class NN_Entity_1:
 
                 (b, self.m, self.n) = self.data_set['X'].shape
 
-            else:
-
-                template_list = return_simple_propositional_templates()
-
-                main_template_list = []
-
-                num_instances = 10000
-
-                num_templates = len(template_list)
-
-                template_error_scorecard = {}
-                for index in range(num_templates):
-                    template_error_scorecard[index] = [0, 0]
-
-                template_choices = []
-
-                for index in range(num_instances):
-                    random_index = np.random.randint(0, num_templates)
-                    template_choices.append(random_index)
-                    main_template_list.append(template_list[random_index])
-
-                result_list, X, Y, one_hot_dictionary = template_list_to_problem_set(num_vars=10,
-                                                                                     template_list=main_template_list)
-
-                data_set = {}
-                data_set['X'] = X
-                data_set['Y'] = Y
-                data_set['one_hot_dictionary'] = one_hot_dictionary
-                data_set['template_choices'] = template_choices
-
-                self.data_set = data_set
-
-                (b, self.m, self.n) = self.data_set['X'].shape
-
             # End if-then logic for data set
 
         # End if-then logic for making new network
@@ -140,6 +107,8 @@ class NN_Entity_1:
             'id_string' : 'n'+str(id_number),
             'sentence_list' : copy.deepcopy(initial_sentences)
         }
+
+
 
     # End initializer
 
@@ -163,6 +132,8 @@ class NN_Entity_1:
                 new_templates_distilled_question.append(new_pair[0])
                 new_templates_answer.append(new_pair[1])
 
+                question_string = json.dumps(new_pair[0],indent=4)
+                answer_string = json.dumps(new_pair[1],indent=4)
         # End loop
 
         num_templates = len(new_templates_distilled_question)
@@ -171,6 +142,10 @@ class NN_Entity_1:
         for index in range(num_templates):
             template_error_scorecard[index] = [0, 0, 0]
 
+
+        fp = open('%s/blank_template_error_scorecard.npy' % (DATA_PATH,), 'wb')
+        pickle.dump(template_error_scorecard, fp)
+        fp.close()
         template_choices = []
 
         if gen_data_sets:
@@ -203,31 +178,31 @@ class NN_Entity_1:
                 data_set['question_template_list'] = question_template_list
                 data_set['answer_template_list'] = answer_template_list
 
-                fp = open('%s/data_set_%d_X1.npy' % (self.DATA_PATH,data_set_index,), 'wb')
+                fp = open('%s/data_set_%d_X1.npy' % (DATA_PATH, data_set_index,), 'wb')
                 np.save(fp, X1)
                 fp.close()
 
-                fp = open('%s/data_set_%d_Y1.npy' % (self.DATA_PATH,data_set_index,), 'wb')
+                fp = open('%s/data_set_%d_Y1.npy' % (DATA_PATH, data_set_index,), 'wb')
                 np.save(fp, Y1)
                 fp.close()
 
-                fp = open('%s/data_set_%d_Y2.npy' % (self.DATA_PATH,data_set_index,), 'wb')
+                fp = open('%s/data_set_%d_Y2.npy' % (DATA_PATH, data_set_index,), 'wb')
                 np.save(fp, Y2)
                 fp.close()
 
-                fp = open('%s/data_set_%d_one_hot_dictionary.pck' % (self.DATA_PATH,data_set_index,), 'wb')
+                fp = open('%s/data_set_%d_one_hot_dictionary.pck' % (DATA_PATH, data_set_index,), 'wb')
                 pickle.dump(one_hot_dictionary, fp)
                 fp.close()
 
-                fp = open('%s/data_set_%d_template_choices.pck' % (self.DATA_PATH,data_set_index,), 'wb')
+                fp = open('%s/data_set_%d_template_choices.pck' % (DATA_PATH, data_set_index,), 'wb')
                 pickle.dump(template_choices, fp)
                 fp.close()
 
-                fp = open('%s/data_set_%d_question_template_list.pck' % (self.DATA_PATH,data_set_index,), 'wb')
+                fp = open('%s/data_set_%d_question_template_list.pck' % (DATA_PATH, data_set_index,), 'wb')
                 pickle.dump(question_template_list, fp)
                 fp.close()
 
-                fp = open('%s/data_set_%d_answer_template_list.pck' % (self.DATA_PATH,data_set_index,), 'wb')
+                fp = open('%s/data_set_%d_answer_template_list.pck' % (DATA_PATH, data_set_index,), 'wb')
                 pickle.dump(answer_template_list, fp)
                 fp.close()
 
@@ -240,32 +215,32 @@ class NN_Entity_1:
             (mx, nx) = X1[0].shape
 
         else:
-            fp = open('%s/data_set_%d_X1.npy' % (self.DATA_PATH,0,), 'rb')
+            fp = open('%s/data_set_%d_X1.npy' % (DATA_PATH, 0,), 'rb')
             X1 = np.load(fp)
             (mx, nx) = X1[0].shape
             fp.close()
 
-            fp = open('%s/data_set_%d_Y1.npy' % (self.DATA_PATH,0,), 'rb')
+            fp = open('%s/data_set_%d_Y1.npy' % (DATA_PATH, 0,), 'rb')
             Y1 = np.load(fp)
             fp.close()
 
-            fp = open('%s/data_set_%d_Y2.npy' % (self.DATA_PATH,0,), 'rb')
+            fp = open('%s/data_set_%d_Y2.npy' % (DATA_PATH, 0,), 'rb')
             Y2 = np.load(fp)
             fp.close()
 
-            fp = open('%s/data_set_%d_one_hot_dictionary.pck' % (self.DATA_PATH,0,), 'rb')
+            fp = open('%s/data_set_%d_one_hot_dictionary.pck' % (DATA_PATH, 0,), 'rb')
             one_hot_dictionary = pickle.load(fp)
             fp.close()
 
-            fp = open('%s/data_set_%d_template_choices.pck' % (self.DATA_PATH,0,), 'rb')
+            fp = open('%s/data_set_%d_template_choices.pck' % (DATA_PATH, 0,), 'rb')
             template_choices = pickle.load(fp)
             fp.close()
 
-            fp = open('%s/data_set_%d_question_template_list.pck' % (self.DATA_PATH,0,), 'rb')
+            fp = open('%s/data_set_%d_question_template_list.pck' % (DATA_PATH, 0,), 'rb')
             question_template_list = pickle.load(fp)
             fp.close()
 
-            fp = open('%s/data_set_%d_answer_template_list.pck' % (self.DATA_PATH,0,), 'rb')
+            fp = open('%s/data_set_%d_answer_template_list.pck' % (DATA_PATH, 0,), 'rb')
             answer_template_list = pickle.load(fp)
             fp.close()
 
@@ -273,9 +248,9 @@ class NN_Entity_1:
 
             inputs = Input(shape=(None, nx))
 
-            x1 = LSTM(256, return_sequences=True)(inputs)
+            x1 = Bidirectional(LSTM(256, return_sequences=True))(inputs)
 
-            x2 = LSTM(256, return_sequences=True)(x1)
+            x2 = Bidirectional(LSTM(256, return_sequences=True))(x1)
 
             n_y1_batch, n_y1_timesteps, n_y1_size = Y1.shape
 
@@ -294,47 +269,49 @@ class NN_Entity_1:
             model.compile(optimizer='Adam', loss='categorical_crossentropy',
                           metrics=['accuracy'])
 
-            model.save("%s/untrained_dual_output.h5" % (self.DATA_PATH,))
+            model.save("%s/untrained_dual_output.h5" % (DATA_PATH, ))
 
         else:
 
-            model = load_model("%s/trained_model_prop_new_%d.h5" % (self.DATA_PATH,start_training_epoch-1,))
+            model = load_model("%s/trained_model_prop_new_%d.h5" % (DATA_PATH, start_training_epoch-1,))
 
         model.summary()
 
         for index in range(start_training_epoch, max_training_epoch):
 
-            data_set_index = np.random.randint(0, max_data_sets)
+            # IMPORTANT: EXCLUDE SET 0 AND USE FOR TESTING LATER ON!
 
-            fp = open('%s/data_set_%d_X1.npy' % (self.DATA_PATH,data_set_index,), 'rb')
+            data_set_index = np.random.randint(1, max_data_sets)
+
+            fp = open('%s/data_set_%d_X1.npy' % (DATA_PATH, data_set_index,), 'rb')
             X = np.load(fp)
             fp.close()
 
-            fp = open('%s/data_set_%d_Y1.npy' % (self.DATA_PATH,data_set_index,), 'rb')
+            fp = open('%s/data_set_%d_Y1.npy' % (DATA_PATH, data_set_index,), 'rb')
             Y1 = np.load(fp)
             fp.close()
 
-            fp = open('%s/data_set_%d_Y2.npy' % (self.DATA_PATH,data_set_index,), 'rb')
+            fp = open('%s/data_set_%d_Y2.npy' % (DATA_PATH, data_set_index,), 'rb')
             Y2 = np.load(fp)
             fp.close()
 
-            fp = open('%s/data_set_%d_one_hot_dictionary.pck' % (self.DATA_PATH,data_set_index,), 'rb')
+            fp = open('%s/data_set_%d_one_hot_dictionary.pck' % (DATA_PATH, data_set_index,), 'rb')
             one_hot_dictionary = pickle.load(fp)
             fp.close()
 
-            fp = open('%s/data_set_%d_one_hot_dictionary.pck' % (self.DATA_PATH,data_set_index,), 'rb')
+            fp = open('%s/data_set_%d_one_hot_dictionary.pck' % (DATA_PATH, data_set_index,), 'rb')
             one_hot_dictionary = pickle.load(fp)
             fp.close()
 
-            fp = open('%s/data_set_%d_template_choices.pck' % (self.DATA_PATH,data_set_index,), 'rb')
+            fp = open('%s/data_set_%d_template_choices.pck' % (DATA_PATH, data_set_index,), 'rb')
             template_choices = pickle.load(fp)
             fp.close()
 
-            fp = open('%s/data_set_%d_question_template_list.pck' % (self.DATA_PATH,data_set_index,), 'rb')
+            fp = open('%s/data_set_%d_question_template_list.pck' % (DATA_PATH, data_set_index,), 'rb')
             question_template_list = pickle.load(fp)
             fp.close()
 
-            fp = open('%s/data_set_%d_answer_template_list.pck' % (self.DATA_PATH,data_set_index,), 'rb')
+            fp = open('%s/data_set_%d_answer_template_list.pck' % (DATA_PATH, data_set_index,), 'rb')
             answer_template_list = pickle.load(fp)
             fp.close()
 
@@ -343,9 +320,75 @@ class NN_Entity_1:
 
             if index % 16 == 0:
 
-                model.save("%s/trained_model_prop_new_%d.h5" % (self.DATA_PATH,index,))
+                model.save("%s/trained_model_prop_new_%d.h5" % (DATA_PATH, index,))
 
-        [Y1_hat, Y2_hat] = model.predict(X)
+        # End training segment
+
+        # Copy key data to self.
+
+        self.model = model
+        data_set = {}
+        data_set['X'] = X1
+        data_set['Y1'] = Y1
+        data_set['Y2'] = Y2
+        data_set['one_hot_dictionary'] = one_hot_dictionary
+        data_set['template_choices'] = template_choices
+        data_set['question_template_list'] = question_template_list
+        data_set['answer_template_list'] = answer_template_list
+        self.data_set = data_set
+
+        (b, self.m, self.n) = self.data_set['X'].shape
+
+        (b1, m1, n1) = Y1.shape
+
+        (b2, m2, n2) = Y2.shape
+
+        self.m1 = m1
+
+        self.n1 = n1
+
+        self.m2 = m2
+
+        self.n2 = n2
+
+    # End method generate_network
+
+    def network_knowledge_test(self):
+
+        fp = open('%s/blank_template_error_scorecard.npy' % (DATA_PATH, ), 'rb')
+        template_error_scorecard = pickle.load(fp)
+        fp.close()
+
+        fp = open('%s/data_set_%d_X1.npy' % (DATA_PATH, 0,), 'rb')
+        X1 = np.load(fp)
+        (mx, nx) = X1[0].shape
+        fp.close()
+
+        fp = open('%s/data_set_%d_Y1.npy' % (DATA_PATH, 0,), 'rb')
+        Y1 = np.load(fp)
+        fp.close()
+
+        fp = open('%s/data_set_%d_Y2.npy' % (DATA_PATH, 0,), 'rb')
+        Y2 = np.load(fp)
+        fp.close()
+
+        fp = open('%s/data_set_%d_one_hot_dictionary.pck' % (DATA_PATH, 0,), 'rb')
+        one_hot_dictionary = pickle.load(fp)
+        fp.close()
+
+        fp = open('%s/data_set_%d_template_choices.pck' % (DATA_PATH, 0,), 'rb')
+        template_choices = pickle.load(fp)
+        fp.close()
+
+        fp = open('%s/data_set_%d_question_template_list.pck' % (DATA_PATH, 0,), 'rb')
+        question_template_list = pickle.load(fp)
+        fp.close()
+
+        fp = open('%s/data_set_%d_answer_template_list.pck' % (DATA_PATH, 0,), 'rb')
+        answer_template_list = pickle.load(fp)
+        fp.close()
+
+        [Y1_hat, Y2_hat] = self.model.predict(X1)
         # Y2_hat = model.predict(X1)
 
         (b1, m1, n1) = Y1.shape
@@ -354,10 +397,15 @@ class NN_Entity_1:
 
         error_count1 = 0
         error_count2 = 0
+
+
+        fp = open("%s/raw_results.txt" % (DATA_PATH, ), "w")
+
+
         for batch_index in range(b1):
 
             original_question = inverse_one_hot_dictionary(one_hot_dictionary,
-                                                           X[batch_index, :, :])
+                                                           X1[batch_index, :, :])
 
             original_answer1 = inverse_one_hot_dictionary(one_hot_dictionary,
                                                           Y1[batch_index, :, :])
@@ -370,6 +418,14 @@ class NN_Entity_1:
 
             network_answer2 = inverse_one_hot_dictionary(one_hot_dictionary,
                                                          Y2_hat[batch_index, :, :])
+
+            fp.write("%s\n%s\n%s\n%s\n%s\n" % (
+                " ".join([x for x in original_question if x]),
+                " ".join([x for x in original_answer1 if x]),
+                " ".join([x for x in network_answer1 if x]),
+                " ".join([x for x in original_answer2 if x]),
+                " ".join([x for x in network_answer2 if x])
+            ))
 
             current_template = template_choices[batch_index]
 
@@ -386,10 +442,12 @@ class NN_Entity_1:
             for answer_index in range(n_len):
                 if original_answer1[answer_index] != network_answer1[answer_index]:
                     error_flag1 = True
+                    fp.write("ERROR ANSWER 1\n")
 
             for answer_index in range(n_len):
                 if original_answer2[answer_index] != network_answer2[answer_index]:
                     error_flag2 = True
+                    fp.write("ERROR ANSWER 2\n")
 
             if error_flag1:
                 error_count1 = error_count1 + 1
@@ -402,10 +460,12 @@ class NN_Entity_1:
 
                 template_error_scorecard[current_template][2] = \
                     template_error_scorecard[current_template][2] + 1
-
+            fp.write("\n")
         # End of error printing loop
 
-        fp = open("%s/key_results_prop_new.txt" %(self.DATA_PATH,), "w")
+        fp.close()
+
+        fp = open("%s/key_results_prop_new.txt" % (DATA_PATH, ), "w")
 
         for template_id in template_error_scorecard:
             print("Template ID and name %d: Tests %d Errors %d Errors %d\n" % (template_id,
@@ -424,30 +484,7 @@ class NN_Entity_1:
 
         fp.close()
 
-        # Copy key data to self.
-
-        self.model = model
-        data_set = {}
-        data_set['X'] = X1
-        data_set['Y1'] = Y1
-        data_set['Y2'] = Y2
-        data_set['one_hot_dictionary'] = one_hot_dictionary
-        data_set['template_choices'] = template_choices
-        data_set['question_template_list'] = question_template_list
-        data_set['answer_template_list'] = answer_template_list
-        self.data_set = data_set
-
-        (b, self.m, self.n) = self.data_set['X'].shape
-
-        self.m1 = m1
-
-        self.n1 = n1
-
-        self.m2 = m2
-
-        self.n2 = n2
-
-    # End method generate_network
+    # End method network_knowledge_test
 
     def query_my_knowledge(self, item_to_query):
 
@@ -546,6 +583,7 @@ new_network_flag = False
 if new_network_flag:
 
     test_entity = NN_Entity_1(id_number=1, gen_data_sets=True,
+                              nn_file=None,
                               max_data_sets=4,
                               start_training_epoch=0,
                               max_training_epoch=2)
@@ -553,25 +591,25 @@ else:
     # Lines below are for using a pre-built model!
 
     test_entity = NN_Entity_1(id_number=1,
-                          nn_file="%s/trained_model_prop_new_4096.h5" % (DATA_PATH,),
-                          data_set_file='%s/data_set_0' % (DATA_PATH,))
+                          nn_file="%s/trained_model_prop_new_4096.h5" % (DATA_PATH, ),
+                          data_set_file='%s/data_set_0' % (DATA_PATH, ))
 
 
 test_entity_2 = NN_Entity_1(id_number=2,
-                          nn_file="%s/trained_model_prop_new_4096.h5" % (DATA_PATH,),
-                          data_set_file='%s/data_set_0' % (DATA_PATH,))
+                          nn_file="%s/trained_model_prop_new_4096.h5" % (DATA_PATH, ),
+                          data_set_file='%s/data_set_0' % (DATA_PATH, ))
 
 # test_entity.add_knowledge("if a2 then a3")
 # test_entity.add_knowledge("a1 is false")
 # test_entity_2.add_knowledge("if a3 then a1")
 
 test_entity.add_knowledge("a9 is false")
-test_entity_2.add_knowledge("if a1 then a9")
+test_entity_2.add_knowledge("a3 or a9")
 
 # Ask first entity for value of a3.  Get its answer
 # and convert answer into format entity 2 can use.
 
-the_question = "what is a1 ?"
+the_question = "what is a3 ?"
 return_dict = test_entity.ask_question_remember_answer(the_question)
 return_string = return_dict['network_answer_string2']
 print(return_string)
