@@ -23,7 +23,7 @@ from nn_utils.problem_generator import *
 from nn_utils.string_and_array import *
 #from neural.basic_nn_1 import *
 
-DATA_PATH = "../data"
+DATA_PATH = "/media/ryan/github/alpha/data"
 
 class NN_Entity_1:
 
@@ -578,15 +578,15 @@ class NN_Entity_1:
 
 # Line below is for building new model!
 
-new_network_flag = False
+new_network_flag = True
 
 if new_network_flag:
 
     test_entity = NN_Entity_1(id_number=1, gen_data_sets=True,
                               nn_file=None,
-                              max_data_sets=4,
+                              max_data_sets=256,
                               start_training_epoch=0,
-                              max_training_epoch=2)
+                              max_training_epoch=2049)
 else:
     # Lines below are for using a pre-built model!
 
