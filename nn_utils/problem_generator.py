@@ -826,7 +826,7 @@ def return_simple_propositional_templates():
             'statement_list' : [],
             'question' : 'what is pa1 ?',
             'answer' : 'pa1 is unknown',
-            'max_instances' : 1
+            'max_instances' : 3
         }
     )
 
@@ -835,7 +835,7 @@ def return_simple_propositional_templates():
             'statement_list' : ['pa1 is unknown'],
             'question' : 'what is pa1 ?',
             'answer' : 'pa1 is unknown',
-            'max_instances' : 10
+            'max_instances' : 3
         }
     )
 
@@ -844,7 +844,7 @@ def return_simple_propositional_templates():
             'statement_list' : ['if pa1 then pa2'],
             'question' : 'what is pa2 ?',
             'answer' : 'pa2 is unknown',
-            'max_instances' : 10
+            'max_instances' : 3
         }
     )
 
@@ -853,7 +853,7 @@ def return_simple_propositional_templates():
             'statement_list' : ['if pa1 then pa2'],
             'question' : 'what is pa1 ?',
             'answer' : 'pa1 is unknown',
-            'max_instances' : 10
+            'max_instances' : 35
         }
     )
 
@@ -862,7 +862,7 @@ def return_simple_propositional_templates():
             'statement_list' : ['pa1 is true'],
             'question' : 'what is pa1 ?',
             'answer' : 'pa1 is true',
-            'max_instances' : 10
+            'max_instances' : 3
         }
     )
 
@@ -871,7 +871,7 @@ def return_simple_propositional_templates():
             'statement_list' : ['pa1 is true'],
             'question' : 'what is pa2 ?',
             'answer' : 'pa2 is unknown',
-            'max_instances' : 10
+            'max_instances' : 3
         }
     )
 
@@ -880,7 +880,7 @@ def return_simple_propositional_templates():
             'statement_list' : ['pa1 is unknown'],
             'question' : 'what is pa2 ?',
             'answer' : 'pa2 is unknown',
-            'max_instances' : 10
+            'max_instances' : 3
         }
     )
 
@@ -889,7 +889,7 @@ def return_simple_propositional_templates():
             'statement_list' : ['pa1 is false'],
             'question' : 'what is pa2 ?',
             'answer' : 'pa2 is unknown',
-            'max_instances' : 10
+            'max_instances' : 3
         }
     )
 
@@ -898,18 +898,54 @@ def return_simple_propositional_templates():
             'statement_list' : ['pa1 is false'],
             'question' : 'what is pa1 ?',
             'answer' : 'pa1 is false',
-            'max_instances' : 10
+            'max_instances' : 3
         }
     )
 
-    # Combined cases
+    initial_template_list.append(
+        {
+            'statement_list' : ['pa1 or pa2'],
+            'question' : 'what is pa2 ?',
+            'answer' : 'pa2 is unknown',
+            'max_instances' : 3
+        }
+    )
+
+    initial_template_list.append(
+        {
+            'statement_list' : ['pa1 or pa2'],
+            'question' : 'what is pa1 ?',
+            'answer' : 'pa1 is unknown',
+            'max_instances' : 3
+        }
+    )
+
+    initial_template_list.append(
+        {
+            'statement_list' : ['pa1 xor pa2'],
+            'question' : 'what is pa2 ?',
+            'answer' : 'pa2 is unknown',
+            'max_instances' : 3
+        }
+    )
+
+    initial_template_list.append(
+        {
+            'statement_list' : ['pa1 xor pa2'],
+            'question' : 'what is pa1 ?',
+            'answer' : 'pa1 is unknown',
+            'max_instances' : 3
+        }
+    )
+
+    # Combined cases (syllogism)
 
     initial_template_list.append(
         {
             'statement_list' : ['pa1 is true', 'if pa1 then pa2'],
             'question' : 'what is pa1 ?',
             'answer' : 'pa1 is true',
-            'max_instances' : 10
+            'max_instances' : 15
         }
     )
 
@@ -918,7 +954,7 @@ def return_simple_propositional_templates():
             'statement_list' : ['pa1 is true', 'if pa1 then pa2'],
             'question' : 'what is pa2 ?',
             'answer' : 'pa2 is true',
-            'max_instances' : 10
+            'max_instances' : 15
         }
     )
 
@@ -927,7 +963,7 @@ def return_simple_propositional_templates():
             'statement_list' : ['pa1 is false', 'if pa1 then pa2'],
             'question' : 'what is pa1 ?',
             'answer' : 'pa1 is false',
-            'max_instances' : 10
+            'max_instances' : 15
         }
     )
 
@@ -936,7 +972,7 @@ def return_simple_propositional_templates():
             'statement_list' : ['pa1 is false', 'if pa1 then pa2'],
             'question' : 'what is pa2 ?',
             'answer' : 'pa2 is unknown',
-            'max_instances' : 10
+            'max_instances' : 15
         }
     )
 
@@ -945,7 +981,7 @@ def return_simple_propositional_templates():
             'statement_list' : ['pa2 is true', 'if pa1 then pa2'],
             'question' : 'what is pa1 ?',
             'answer' : 'pa1 is unknown',
-            'max_instances' : 10
+            'max_instances' : 15
         }
     )
 
@@ -954,7 +990,7 @@ def return_simple_propositional_templates():
             'statement_list' : ['pa2 is true', 'if pa1 then pa2'],
             'question' : 'what is pa2 ?',
             'answer' : 'pa2 is true',
-            'max_instances' : 10
+            'max_instances' : 15
         }
     )
 
@@ -963,7 +999,7 @@ def return_simple_propositional_templates():
             'statement_list' : ['pa2 is false', 'if pa1 then pa2'],
             'question' : 'what is pa1 ?',
             'answer' : 'pa1 is false',
-            'max_instances' : 10
+            'max_instances' : 15
         }
     )
 
@@ -972,7 +1008,175 @@ def return_simple_propositional_templates():
             'statement_list' : ['pa2 is false', 'if pa1 then pa2'],
             'question' : 'what is pa2 ?',
             'answer' : 'pa2 is false',
-            'max_instances' : 10
+            'max_instances' : 15
+        }
+    )
+
+    # Combined cases (OR)
+
+    initial_template_list.append(
+        {
+            'statement_list' : ['pa1 is true', 'pa1 or pa2'],
+            'question' : 'what is pa1 ?',
+            'answer' : 'pa1 is true',
+            'max_instances' : 15
+        }
+    )
+
+    initial_template_list.append(
+        {
+            'statement_list' : ['pa1 is true', 'pa1 or pa2'],
+            'question' : 'what is pa2 ?',
+            'answer' : 'pa2 is unknown',
+            'max_instances' : 15
+        }
+    )
+
+    initial_template_list.append(
+        {
+            'statement_list' : ['pa1 is false', 'pa1 or pa2'],
+            'question' : 'what is pa1 ?',
+            'answer' : 'pa1 is false',
+            'max_instances' : 15
+        }
+    )
+
+    initial_template_list.append(
+        {
+            'statement_list' : ['pa1 is false', 'pa1 or pa2'],
+            'question' : 'what is pa2 ?',
+            'answer' : 'pa2 is true',
+            'max_instances' : 15
+        }
+    )
+
+    initial_template_list.append(
+        {
+            'statement_list' : ['pa2 is true', 'pa1 or pa2'],
+            'question' : 'what is pa1 ?',
+            'answer' : 'pa1 is unknown',
+            'max_instances' : 15
+        }
+    )
+
+    initial_template_list.append(
+        {
+            'statement_list' : ['pa2 is true', 'pa1 or pa2'],
+            'question' : 'what is pa2 ?',
+            'answer' : 'pa2 is true',
+            'max_instances' : 15
+        }
+    )
+
+    initial_template_list.append(
+        {
+            'statement_list' : ['pa2 is false', 'pa1 or pa2'],
+            'question' : 'what is pa1 ?',
+            'answer' : 'pa1 is true',
+            'max_instances' : 15
+        }
+    )
+
+    initial_template_list.append(
+        {
+            'statement_list' : ['pa2 is false', 'pa1 or pa2'],
+            'question' : 'what is pa2 ?',
+            'answer' : 'pa2 is false',
+            'max_instances' : 15
+        }
+    )
+
+    # Combined cases (XOR)
+
+    initial_template_list.append(
+        {
+            'statement_list' : ['pa1 is true', 'pa1 xor pa2'],
+            'question' : 'what is pa1 ?',
+            'answer' : 'pa1 is true',
+            'max_instances' : 15
+        }
+    )
+
+    initial_template_list.append(
+        {
+            'statement_list' : ['pa1 is true', 'pa1 xor pa2'],
+            'question' : 'what is pa2 ?',
+            'answer' : 'pa2 is false',
+            'max_instances' : 15
+        }
+    )
+
+    initial_template_list.append(
+        {
+            'statement_list' : ['pa1 is false', 'pa1 xor pa2'],
+            'question' : 'what is pa1 ?',
+            'answer' : 'pa1 is false',
+            'max_instances' : 15
+        }
+    )
+
+    initial_template_list.append(
+        {
+            'statement_list' : ['pa1 is false', 'pa1 xor pa2'],
+            'question' : 'what is pa2 ?',
+            'answer' : 'pa2 is true',
+            'max_instances' : 15
+        }
+    )
+
+    initial_template_list.append(
+        {
+            'statement_list' : ['pa2 is true', 'pa1 xor pa2'],
+            'question' : 'what is pa1 ?',
+            'answer' : 'pa1 is false',
+            'max_instances' : 15
+        }
+    )
+
+    initial_template_list.append(
+        {
+            'statement_list' : ['pa2 is true', 'pa1 xor pa2'],
+            'question' : 'what is pa2 ?',
+            'answer' : 'pa2 is true',
+            'max_instances' : 15
+        }
+    )
+
+    initial_template_list.append(
+        {
+            'statement_list' : ['pa2 is false', 'pa1 xor pa2'],
+            'question' : 'what is pa1 ?',
+            'answer' : 'pa1 is true',
+            'max_instances' : 15
+        }
+    )
+
+    initial_template_list.append(
+        {
+            'statement_list' : ['pa2 is false', 'pa1 xor pa2'],
+            'question' : 'what is pa2 ?',
+            'answer' : 'pa2 is false',
+            'max_instances' : 15
+        }
+    )
+
+    # Combined cases (AND)
+
+    initial_template_list.append(
+        {
+            'statement_list' : ['pa1 and pa2'],
+            'question' : 'what is pa1 ?',
+            'answer' : 'pa1 is true',
+            'max_instances' : 15
+        }
+    )
+
+    initial_template_list.append(
+        {
+            'statement_list' : ['pa1 and pa2'],
+            'question' : 'what is pa2 ?',
+            'answer' : 'pa2 is true',
+            'max_instances' : 15
         }
     )
 
@@ -999,12 +1203,18 @@ def return_simple_propositional_templates():
     template_list = copy.deepcopy(initial_template_list)
 
     distractor_statements = ['pa1 is unknown', 'pa2 is unknown',
+                             'pa3 is unknown', 'pa3 is true', 'pa3 is false',
+                             'if pa1 then pa3', 'if pa2 then pa3',
+                             'if pa3 then pa1', 'if pa3 then pa2']
+    distractor_statements = ['pa1 is unknown', 'pa2 is unknown',
                              'pa3 is unknown', 'pa3 is true', 'pa3 is false']
 
-    # distractor_statements = ['pa1 is unknown', 'pa2 is unknown',
-    #                          'pa3 is unknown']
+    distractor_statements_2 = ['pa1 is unknown', 'pa2 is unknown',
+                             'pa3 is unknown']
 
     n_distractors = len(distractor_statements)
+
+    n_distractors_2 = len(distractor_statements_2)
 
     for current_template in initial_template_list:
 
@@ -1022,6 +1232,32 @@ def return_simple_propositional_templates():
             template_copy_a['statement_list'].append(distractor_statements[index])
 
             template_copy_b['statement_list'].append(distractor_statements[index])
+
+            template_copy_b['question'] = 'help'
+
+            template_list.append(template_copy_a)
+
+            template_list.append(template_copy_b)
+
+            # When the question changes to "help", the answer
+            # string depends on the ORDER in which statements are made.
+            # This will be finalized in the function create_problem_with_repetion,
+            # and in THAT function the template answer will be changed to be
+            # a cleaned up version of the statement list.
+
+    intermediate_template_list = copy.deepcopy(template_list)
+
+    for current_template in intermediate_template_list:
+
+        for index in range(n_distractors_2):
+
+            template_copy_a = copy.deepcopy(current_template)
+
+            template_copy_b = copy.deepcopy(current_template)
+
+            template_copy_a['statement_list'].append(distractor_statements_2[index])
+
+            template_copy_b['statement_list'].append(distractor_statements_2[index])
 
             template_copy_b['question'] = 'help'
 
