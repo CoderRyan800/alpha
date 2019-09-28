@@ -578,7 +578,7 @@ class NN_Entity_1:
 
 # Line below is for building new model!
 
-new_network_flag = True
+new_network_flag = False
 
 if new_network_flag:
 
@@ -604,7 +604,7 @@ test_entity_2 = NN_Entity_1(id_number=2,
 # test_entity_2.add_knowledge("if a3 then a1")
 
 test_entity.add_knowledge("a9 is false")
-test_entity_2.add_knowledge("a3 or a9")
+test_entity_2.add_knowledge("a3 xor a9")
 
 # Ask first entity for value of a3.  Get its answer
 # and convert answer into format entity 2 can use.
