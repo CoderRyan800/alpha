@@ -575,3 +575,71 @@ class NN_Entity_1:
 
 # End class declaration NN_Entity_1
 
+def two_agent_demo(agent_1_knowledge, agent_2_knowledge, question_for_agent_1):
+
+
+    # Create the two agents
+    test_entity = NN_Entity_1(id_number=1,
+                          nn_file="%s/trained_model_prop_new_2048.h5" % (DATA_PATH, ),
+                          data_set_file='%s/data_set_0' % (DATA_PATH, ))
+    
+    
+    test_entity_2 = NN_Entity_1(id_number=2,
+                              nn_file="%s/trained_model_prop_new_2048.h5" % (DATA_PATH, ),
+                              data_set_file='%s/data_set_0' % (DATA_PATH, ))
+    # Give the agents knowledge
+    test_entity.add_knowledge(agent_1_knowledge)
+    test_entity_2.add_knowledge(agent_2_knowledge)
+    
+    # Ask first entity for value of a3.  Get its answer
+    # and convert answer into format entity 2 can use.
+    print("Agent 1 knowledge: %s\n" % (agent_1_knowledge,))
+    print("Agent 2 knowledge: %s\n" % (agent_2_knowledge,))
+    print("Asking agent 1 the following question: %s\n" % (question_for_agent_1,))
+    
+    return_dict = test_entity.ask_question_remember_answer(question_for_agent_1)
+    return_string = return_dict['network_answer_string2']
+    print("Agent 1 response: %s\n" % (return_string,))
+    
+    return_sentences = return_string.split(".")
+    
+    return_list = []
+    
+    regex_help = re.compile("help")
+    
+    help_flag = False # Only goes true if first entity asks for help.
+    for sentence in return_sentences:
+        new_sentence = sentence.strip()
+        if regex_help.search(new_sentence) is None:
+            return_list.append(sentence)
+            test_entity_2.add_knowledge(sentence)
+        else:
+            help_flag = True
+    
+    # If first entity asked for help, then second entity responds with
+    # dump of its own knowledge.
+    
+    if help_flag:
+        print("Requesting help from agent 2\n")
+        return_dict_2 = test_entity_2.ask_question_remember_answer("help")
+    
+        return_string_2 = return_dict_2['network_answer_string2']
+    
+        print ("Agent 2 knowledge base dump response: %s\n" % (return_string_2,))
+    
+        return_list_2 = return_string_2.split(".")
+    
+        for sentence in return_list_2:
+    
+            new_sentence = sentence.strip()
+            test_entity.add_knowledge(new_sentence)
+    
+        # RE-run
+        print("Asking agent 1 the same question again\n")
+        new_dictionary = test_entity.ask_question_remember_answer(question_for_agent_1)
+    
+        new_answer = new_dictionary['network_answer_string2']
+        print ("Agent 1's new response given Agent 2's knowledge dump: %s\n" % (new_answer,))
+    # End block that runs if agent 1 needs help from agent 2
+# End function two-agent demo
+
