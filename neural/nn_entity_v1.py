@@ -23,7 +23,7 @@ from nn_utils.problem_generator import *
 from nn_utils.string_and_array import *
 #from neural.basic_nn_1 import *
 
-DATA_PATH = "/media/ryan/github/alpha/data"
+DATA_PATH = "../data"
 
 class NN_Entity_1:
 
@@ -575,83 +575,3 @@ class NN_Entity_1:
 
 # End class declaration NN_Entity_1
 
-
-# Line below is for building new model!
-
-new_network_flag = False
-
-if new_network_flag:
-
-    test_entity = NN_Entity_1(id_number=1, gen_data_sets=True,
-                              nn_file=None,
-                              max_data_sets=256,
-                              start_training_epoch=0,
-                              max_training_epoch=2049)
-else:
-    # Lines below are for using a pre-built model!
-
-    test_entity = NN_Entity_1(id_number=1,
-                          nn_file="%s/trained_model_prop_new_4096.h5" % (DATA_PATH, ),
-                          data_set_file='%s/data_set_0' % (DATA_PATH, ))
-
-
-test_entity_2 = NN_Entity_1(id_number=2,
-                          nn_file="%s/trained_model_prop_new_4096.h5" % (DATA_PATH, ),
-                          data_set_file='%s/data_set_0' % (DATA_PATH, ))
-
-# test_entity.add_knowledge("if a2 then a3")
-# test_entity.add_knowledge("a1 is false")
-# test_entity_2.add_knowledge("if a3 then a1")
-
-test_entity.add_knowledge("a9 is false")
-test_entity_2.add_knowledge("a3 xor a9")
-
-# Ask first entity for value of a3.  Get its answer
-# and convert answer into format entity 2 can use.
-
-the_question = "what is a3 ?"
-return_dict = test_entity.ask_question_remember_answer(the_question)
-return_string = return_dict['network_answer_string2']
-print(return_string)
-
-return_sentences = return_string.split(".")
-
-return_list = []
-
-regex_help = re.compile("help")
-
-help_flag = False # Only goes true if first entity asks for help.
-for sentence in return_sentences:
-    new_sentence = sentence.strip()
-    if regex_help.search(new_sentence) is None:
-        return_list.append(sentence)
-        test_entity_2.add_knowledge(sentence)
-    else:
-        help_flag = True
-
-# If first entity asked for help, then second entity responds with
-# dump of its own knowledge.
-
-if help_flag:
-    return_dict_2 = test_entity_2.ask_question_remember_answer("help")
-
-    return_string_2 = return_dict_2['network_answer_string2']
-
-    print (return_string_2)
-
-    return_list_2 = return_string_2.split(".")
-
-    for sentence in return_list_2:
-
-        new_sentence = sentence.strip()
-        test_entity.add_knowledge(new_sentence)
-
-    # RE-run
-
-    new_dictionary = test_entity.ask_question_remember_answer(the_question)
-
-    new_answer = new_dictionary['network_answer_string2']
-else:
-    new_answer = None
-
-print (new_answer)
